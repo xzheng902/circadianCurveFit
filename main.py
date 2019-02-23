@@ -11,7 +11,7 @@ import analysis
 
 def main(argv):
     if len(argv) < 2:
-        print( 'Usage: python3 %s <csv filename>' % (argv[0]))
+        print( 'Usage: python3 %s <csv filename> <optional numtest>' % (argv[0]))
         exit(0)
 
     expList = data.read(argv[1])
@@ -21,19 +21,47 @@ def main(argv):
         if idx>len(expList)-1:
             idx = len(expList)-1
     else:
-        idx = 0
+        idx = -1
 
-    print(expList[idx])
-    # non-linear curve fit
-    params = analysis.least_squares_Hirota(expList[idx])
-    x = np.linspace(24, 96, 500)
-    y = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
-    # red fit
-    plt.plot(x, y, 'r-')
+    # if input index, then plot that exp
+    if idx >= 0:
+        print(expList[idx])
+        # non-linear curve fit
+        params = analysis.least_squares_Hirota(expList[idx])
+        x = np.array(expList[idx].getdata()[:,0])
+        y_data = np.array(expList[idx].getdata()[:,1])
+        y_exp = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
 
-    # blue raw data
-    plt.plot(expList[idx].getdata()[:,0], expList[idx].getdata()[:,1], 'b-')
-    plt.show()
+        # make figure
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        # red fit
+        ax.plot(x, y_exp, 'r-')
+        # blue raw data
+        ax.plot(x, y_data, 'b-')
+        ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes)
+        plt.show()
+    # otherwise plot all experiments in the list
+    else:
+        fig = plt.figure()
+        # calculate the layout n*4
+        numRows = int(len(expList)/4)
+        if len(expList)%4>0:
+            numRows += 1
+        for i in range(len(expList)):
+            params = analysis.least_squares_Hirota(expList[i])
+            x = np.array(expList[i].getdata()[:,0])
+            y_data = np.array(expList[i].getdata()[:,1])
+            y_exp = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
+            ax = fig.add_subplot(numRows, 4, i+1)
+            # red fit
+            ax.plot(x, y_exp, 'r-')
+            # blue raw data
+            ax.plot(x, y_data, 'b-')
+            ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes)
+        plt.show()
+
+
 
 if __name__ == "__main__":
     main(sys.argv)
