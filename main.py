@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 import data
 import analysis
+import accuracy
 
 def main(argv):
     if len(argv) < 2:
@@ -39,7 +40,10 @@ def main(argv):
         ax.plot(x, y_exp, 'r-')
         # blue raw data
         ax.plot(x, y_data, 'b-')
-        ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes)
+        ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
+        rmse = accuracy.rmse(y_data, y_exp)
+        rsquare = accuracy.rsquare(y_data, y_exp)
+        ax.text(0.5, 0.9, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
         plt.show()
     # otherwise plot all experiments in the list
     else:
@@ -58,7 +62,11 @@ def main(argv):
             ax.plot(x, y_exp, 'r-')
             # blue raw data
             ax.plot(x, y_data, 'b-')
-            ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes)
+            ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+            rmse = accuracy.rmse(y_data, y_exp)
+            rsquare = accuracy.rsquare(y_data, y_exp)
+            ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+
         plt.show()
 
 
