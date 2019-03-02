@@ -43,7 +43,8 @@ def main(argv):
         ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
         rmse = accuracy.rmse(y_data, y_exp)
         rsquare = accuracy.rsquare(y_data, y_exp)
-        ax.text(0.5, 0.9, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
+        peakDiffSquare = accuracy.peakDiffSquare(x, y_data, y_exp, params[3], params[4])
+        ax.text(0.5, 0.9, "RMSE = %.4f R^2 = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
         plt.show()
     # otherwise plot all experiments in the list
     else:
@@ -65,7 +66,8 @@ def main(argv):
             ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
             rmse = accuracy.rmse(y_data, y_exp)
             rsquare = accuracy.rsquare(y_data, y_exp)
-            ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+            peakDiffSquare = accuracy.peakDiffSquare(x, y_data, y_exp, params[3], params[4])
+            ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
 
         plt.show()
 
