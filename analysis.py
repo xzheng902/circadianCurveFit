@@ -36,5 +36,10 @@ def least_squares_Hirota(full_data):
     est_amp = (np.max(npdata,axis=0)[0,1]-np.min(npdata, axis=0)[0,1])/2
 
     # curve fit
-    popt, pcov = scipy.optimize.curve_fit(obj_func_Hirota, np.array(npdata[:,0]).flatten(), np.array(npdata[:,1]).flatten(), p0=[est_baseline, est_amp, est_damp, est_phase, est_period, est_trend])
+    try:
+        popt, pcov = scipy.optimize.curve_fit(obj_func_Hirota, np.array(npdata[:,0]).flatten(), np.array(npdata[:,1]).flatten(), p0=[est_baseline, est_amp, est_damp, est_phase, est_period, est_trend])
+    except:
+        return None
+
+
     return popt

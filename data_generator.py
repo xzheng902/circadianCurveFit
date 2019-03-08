@@ -35,6 +35,12 @@ def obj_func_Hirota_allnoise(x, baseline, amplitude, damp, phase, period, trend,
     period_inc_noise = np.linspace(0-inc/2, inc/2, x.size)
     return y_noise + baseline + amplitude*(np.exp(- damp*x))*np.cos(2*np.pi*(x-phase)/(period+period_inc_noise+period_normal_noise)) + trend*x
 
+# Hirota obj func with increasing damping noise + normal damping noise
+def obj_func_Hirota_dampingnoise(x, baseline, amplitude, damp, phase, period, trend, dinc, dnoise):
+    damping_normal_noise = dnoise * np.random.normal(size=x.size)
+    damping_inc_noise = np.linspace(0-dinc/2, dinc/2, x.size)
+    return baseline + amplitude*(np.exp(- (damping_normal_noise+damping_inc_noise+damp)*x))*np.cos(2*np.pi*(x-phase)/period) + trend*x
+
 
 # default case
 def case0(x, params):
@@ -56,6 +62,10 @@ def case3(x, params, inc, noise):
 
 def case4(x, params, inc, pnoise, ynoise):
     y = obj_func_Hirota_allnoise(x, params[0], params[1], params[2], params[3], params[4], params[5], inc, pnoise, ynoise)
+    return y
+
+def case5(x, params, dinc, dnoise):
+    y = obj_func_Hirota_dampingnoise(x, params[0], params[1], params[2], params[3], params[4], params[5], dinc, dnoise)
     return y
 
 def main(argv):
@@ -135,6 +145,19 @@ def main(argv):
     datamat = np.hstack((datamat, np.matrix(xdays).T, np.matrix(y).T))
 
     y = case4(xhours, params, 2, 0.5, 50)
+    datamat = np.hstack((datamat, np.matrix(xdays).T, np.matrix(y).T))
+
+    # damping noise
+    y = case5(xhours, params, 0.01, 0.001)
+    datamat = np.hstack((datamat, np.matrix(xdays).T, np.matrix(y).T))
+
+    y = case5(xhours, params, 0.1, 0.001)
+    datamat = np.hstack((datamat, np.matrix(xdays).T, np.matrix(y).T))
+
+    y = case5(xhours, params, 0.2, 0.001)
+    datamat = np.hstack((datamat, np.matrix(xdays).T, np.matrix(y).T))
+
+    y = case5(xhours, params, 0.4, 0.001)
     datamat = np.hstack((datamat, np.matrix(xdays).T, np.matrix(y).T))
 
 
