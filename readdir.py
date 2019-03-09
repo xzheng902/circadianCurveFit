@@ -14,7 +14,8 @@ def readdir(dir):
         # for directory in directories:
         #     print(os.path.join(root, directory))
         for filename in filenames:
-            filelist.append(os.path.join(root,filename))
+            if filename[0] != '.':
+                filelist.append(os.path.join(root,filename))
     return filelist
 
 
