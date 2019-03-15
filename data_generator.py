@@ -163,7 +163,7 @@ def main(argv):
 
     # write the data to a file
     numExp = (int)(datamat.shape[1]/2)
-    fp = open('../testdata/generaterData.csv', 'w');
+    fp = open('../testdata/test-test-test-test.csv', 'w');
     s = "1/1/11, "
     for i in range(numExp-1):
         s+= ",1/1/11, "

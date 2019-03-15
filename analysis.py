@@ -17,7 +17,7 @@ def obj_func_Hirota(x, baseline, amplitude, damp, phase, period, trend):
 
 def least_squares_Hirota(full_data):
     # get data from 24-96 hours
-    npdata = full_data.getdata()
+    npdata = full_data.windowBaselinedData()
     # find mid point
     midIdx = int(npdata.shape[0]/2)
 
