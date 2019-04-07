@@ -53,9 +53,9 @@ def peakDiffSquare(x, obs, exp, exp_phase, exp_period):
     # print(exp_peaks_real_idx)
 
     # use exp peaks from exp data (not cosine formula)
-    # 6 hour window
-    obs_peaks = findObsPeaksIdx(x, obs, exp_peaks_real_idx, 36)
-    exp_peaks = findObsPeaksIdx(x, exp, exp_peaks_real_idx, 36)
+    # 4 hour window
+    obs_peaks = findObsPeaksIdx(x, obs, exp_peaks_real_idx, 24)
+    exp_peaks = findObsPeaksIdx(x, exp, exp_peaks_real_idx, 24)
 
     return np.sum(np.square(np.matrix(obs_peaks)-np.matrix(exp_peaks)))
 

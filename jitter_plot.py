@@ -61,7 +61,7 @@ class Experiment:
         elif self.reporter == 'Per2':
             ax.set_xticks([1,2,3,4,5])
             ax.set_xticklabels(['nontreated', 'p8uM', '2uM', '7uM', '10uM'])
-            ax.set_title("Indirubin Bmal1")
+            ax.set_title("Indirubin Per2")
 
 
         plt.show()

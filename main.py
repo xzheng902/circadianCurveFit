@@ -28,8 +28,8 @@ def main(argv):
     if idx >= 0:
         print(expList[idx])
         # non-linear curve fit
-        x = np.array(expList[idx].windowBaselinedData()[:,0])
-        y_data = np.array(expList[idx].windowBaselinedData()[:,1])
+        x = np.array(expList[idx].processData()[:,0])
+        y_data = np.array(expList[idx].processData()[:,1])
         # make figure
         fig = plt.figure()
         ax = fig.add_subplot(111)
@@ -60,8 +60,8 @@ def main(argv):
         if len(expList)%4>0:
             numRows += 1
         for i in range(len(expList)):
-            x = np.array(expList[i].windowBaselinedData()[:,0])
-            y_data = np.array(expList[i].windowBaselinedData()[:,1])
+            x = np.array(expList[i].processData()[:,0])
+            y_data = np.array(expList[i].processData()[:,1])
             params = analysis.least_squares_Hirota(expList[i])
             ax = fig.add_subplot(numRows, 4, i+1)
             # blue raw data

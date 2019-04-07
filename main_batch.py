@@ -33,8 +33,8 @@ def main(argv):
     for file in filels:
         expList = data.read(file)
         for i in range(len(expList)):
-            x = np.array(expList[i].windowBaselinedData()[:,0])
-            y_data = np.array(expList[i].windowBaselinedData()[:,1])
+            x = np.array(expList[i].processData()[:,0])
+            y_data = np.array(expList[i].processData()[:,1])
             fig = plt.figure()
             ax = fig.add_subplot(111)
             ax.plot(x, y_data, 'b-')
@@ -44,9 +44,14 @@ def main(argv):
                 rmses.append(-1)
                 rsquares.append(-1)
                 peakDiffSquares.append(-1)
+                exp = file.split('/')[-1][:-4]+"_"+str(i)
+                exps.append(exp)
+                periods.append(-1)
                 continue
             y_exp = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
             ax.plot(x, y_exp, 'r-')
+            # green residual
+            ax.plot(x, y_data-y_exp, 'g-')
             ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
             rmse = accuracy.rmse(y_data, y_exp)
             rsquare = accuracy.rsquare(y_data, y_exp)
@@ -63,7 +68,8 @@ def main(argv):
             exp = file.split('/')[-1][:-4]+"_"+str(i)
             exps.append(exp)
             periods.append(params[4])
-            # fig.savefig(exp, dpi=600)
+            fig.savefig("res_"+exp, dpi=600)
+            plt.close(fig)
 
             # plt.show()
 
