@@ -23,6 +23,15 @@ def rsquare(obs, exp):
     sst = np.sum(np.square(obs-mean))
     return 1-sse/sst
 
+# rsquare
+def rsquare_damp(obs, exp, x, l):
+    damp = np.exp(l*x)
+    residual = exp-obs
+    sse = np.sum(np.square(np.multiply(residual, damp)))
+    mean = np.mean(obs)
+    sst = np.sum(np.square(np.multiply(obs-mean, damp)))
+    return 1-sse/sst
+
 # calculate the sum of sqaure of peak difference
 def peakDiffSquare(x, obs, exp, exp_phase, exp_period):
     # find the exp peaks based on cosine phase + period

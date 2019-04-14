@@ -37,11 +37,21 @@ class Data:
     # get data of a given period
     # default 24-96
     def getdata(self, start=24, end=96):
+        # print(start, end)
         for i in range(self.data.shape[0]):
             if self.data[i,0]<start and self.data[i+1,0]>=start:
-                start_row = i+1
+                # print("find start", self.data[i,0], self.data[i+1,0])
+                if abs(self.data[i,0]-start)<1e-3:
+                    start_row = i
+                else:
+                    start_row = i+1
             elif self.data[i,0]<=end and self.data[i+1,0]>end:
-                end_row = i+1
+                # print("find end", self.data[i,0], self.data[i+1,0])
+                if abs(self.data[i+1,0]-end)<1e-3:
+                    end_row = i+2
+                else:
+                    end_row = i+1
+        # print(start_row, end_row)
         return self.data[start_row:end_row,:].copy()
 
     # use a window to detrend the data
@@ -97,18 +107,24 @@ class Data:
         return d
 
     # remove outlier, smooth, and detrend
-    def processData(self, start=36, end=96, window_half=12):
+    def processData(self, start=36, end=96, window_half=12, smooth = 4):
         # remove outlier
-        d = self.getdata(start-window_half-1/6,end+window_half+1/6)
+        d = self.getdata(start = start-window_half-smooth/6, end = end+window_half+smooth/6)
+        # print(d.shape)
+        # print(d)
         processed = self.removeOutliers(d)
+        # print(processed.shape)
 
         # smooth
-        smoothed = self.calcTrend(processed, 1/6)
-        processed = processed[1:-1,:]
+        smoothed = self.calcTrend(processed, smooth/6)
+        # print("smoothed", smoothed.shape)
+        processed = processed[smooth:-smooth,:]
         processed[:,1] = np.matrix(smoothed).T
+        # print(processed.shape)
 
         # get data and detrend
         trend = self.calcTrend(processed)
+        # print("trend", trend.shape)
         for i in range(processed.shape[0]):
             if processed[i,0]<start and processed[i+1,0]>=start:
                 start_row = i+1
@@ -116,6 +132,7 @@ class Data:
                 end_row = i+1
         processed = processed[start_row:end_row,:].copy()
         processed[:,1] -= np.matrix(trend).T
+        # print(processed.shape)
 
         return processed
 
@@ -158,10 +175,10 @@ if __name__ == "__main__":
         exit(0)
 
     expList = read(sys.argv[1])
-    print(expList[0])
-    # print(expList[0].getdata())
-    plt.plot(expList[0].getdata()[:,0], expList[0].getdata()[:,1])
-    plt.show()
+    # print(expList[0])
+    # # print(expList[0].getdata())
+    # plt.plot(expList[0].getdata()[:,0], expList[0].getdata()[:,1])
+    # plt.show()
 
     # detrended = expList[0].windowBaselinedData()
     # print(detrended)

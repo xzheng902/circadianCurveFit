@@ -12,6 +12,7 @@ import data
 import analysis
 import accuracy
 import readdir
+import residual_analysis
 
 def main(argv):
     if len(argv) < 2:
@@ -27,6 +28,7 @@ def main(argv):
     periods = []
     rmses = []
     rsquares = []
+    rsquare_damps = []
     peakDiffSquares = []
 
 
@@ -43,6 +45,7 @@ def main(argv):
                 print("Curve_fit failed for experiemnt "+str(i))
                 rmses.append(-1)
                 rsquares.append(-1)
+                rsquare_damps.append(-1)
                 peakDiffSquares.append(-1)
                 exp = file.split('/')[-1][:-4]+"_"+str(i)
                 exps.append(exp)
@@ -55,15 +58,17 @@ def main(argv):
             ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
             rmse = accuracy.rmse(y_data, y_exp)
             rsquare = accuracy.rsquare(y_data, y_exp)
+            rsquare_damp = accuracy.rsquare_damp(y_data, y_exp, x, params[2])
             try:
                 peakDiffSquare = accuracy.peakDiffSquare(x, y_data, y_exp, params[3], params[4])
-                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, rsquare_damp, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
             except:
                 print("Unable to compute peakDiffSquare for experiment index "+str(i))
-                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f" % (rmse, rsquare, rsquare_damp) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
                 peakDiffSquare = -1
             rmses.append(rmse)
             rsquares.append(rsquare)
+            rsquare_damps.append(rsquare_damp)
             peakDiffSquares.append(peakDiffSquare)
             exp = file.split('/')[-1][:-4]+"_"+str(i)
             exps.append(exp)
@@ -73,11 +78,11 @@ def main(argv):
 
             # plt.show()
 
-    results = np.matrix([rmses, rsquares, peakDiffSquares]).T
+    results = np.matrix([rmses, rsquares, rsquare_damps, peakDiffSquares]).T
     fp = open('results.csv', 'w')
-    fp.write('exp, period, rmse, rsquare, peakDiffSquare\n')
+    fp.write('exp, period, rmse, rsquare, rsqare_damp, peakDiffSquare\n')
     for i in range(results.shape[0]):
-        fp.write(str(exps[i])+','+str(periods[i])+','+str(results[i,0])+','+str(results[i,1])+','+str(results[i,2])+'\n')
+        fp.write(str(exps[i])+','+str(periods[i])+','+str(results[i,0])+','+str(results[i,1])+','+str(results[i,2])+','+str(results[i,3])+'\n')
 
     fp.close()
 

@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import data
 import analysis
 import accuracy
+import residual_analysis
 
 def main(argv):
     if len(argv) < 2:
@@ -42,15 +43,19 @@ def main(argv):
             y_exp = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
             # red fit
             ax.plot(x, y_exp, 'r-')
+            # green residual
+            ax.plot(x, y_data-y_exp, 'g-')
+            residual_analysis.residual_fft(y_data-y_exp)
             ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
             rmse = accuracy.rmse(y_data, y_exp)
             rsquare = accuracy.rsquare(y_data, y_exp)
+            rsquare_damp = accuracy.rsquare_damp(y_data, y_exp, x, params[2])
             try:
                 peakDiffSquare = accuracy.peakDiffSquare(x, y_data, y_exp, params[3], params[4])
-                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, rsquare_damp, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
             except:
                 print("Unable to compute peakDiffSquare for experiment index "+str(idx))
-                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f" % (rmse, rsquare, rsquare_damp) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
         plt.show()
     # otherwise plot all experiments in the list
     else:
@@ -75,12 +80,13 @@ def main(argv):
             ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
             rmse = accuracy.rmse(y_data, y_exp)
             rsquare = accuracy.rsquare(y_data, y_exp)
+            rsquare_damp = accuracy.rsquare_damp(y_data, y_exp, x, params[2])
             try:
                 peakDiffSquare = accuracy.peakDiffSquare(x, y_data, y_exp, params[3], params[4])
-                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f\n PeakSquareDiff = %.4f" % (rmse, rsquare, rsquare_damp, peakDiffSquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
             except:
                 print("Unable to compute peakDiffSquare for experiment index "+str(i))
-                ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f" % (rmse, rsquare) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
+                # ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f" % (rmse, rsquare, rsquare_damp) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
 
         plt.show()
 
