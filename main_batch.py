@@ -30,7 +30,9 @@ def main(argv):
     rsquares = []
     rsquare_damps = []
     peakDiffSquares = []
+    outputs = []
 
+    params_full = []
 
     for file in filels:
         expList = data.read(file)
@@ -41,6 +43,7 @@ def main(argv):
             ax = fig.add_subplot(111)
             ax.plot(x, y_data, 'b-')
             params = analysis.least_squares_Hirota(expList[i])
+            params_full.append(params)
             if params is None:
                 print("Curve_fit failed for experiemnt "+str(i))
                 rmses.append(-1)
@@ -50,11 +53,12 @@ def main(argv):
                 exp = file.split('/')[-1][:-4]+"_"+str(i)
                 exps.append(exp)
                 periods.append(-1)
+                outputs.append(False)
                 continue
             y_exp = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
             ax.plot(x, y_exp, 'r-')
-            # green residual
-            ax.plot(x, y_data-y_exp, 'g-')
+            # # green residual
+            # ax.plot(x, y_data-y_exp, 'g-')
             ax.text(0.5, 0.95, "Period = %.2f" % params[4], horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=8)
             rmse = accuracy.rmse(y_data, y_exp)
             rsquare = accuracy.rsquare(y_data, y_exp)
@@ -66,6 +70,9 @@ def main(argv):
                 print("Unable to compute peakDiffSquare for experiment index "+str(i))
                 ax.text(0.5, 0.85, "RMSE = %.4f R^2 = %.4f R^2d = %.4f" % (rmse, rsquare, rsquare_damp) , horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=6)
                 peakDiffSquare = -1
+            output = accuracy.criteria(params[4], rsquare, rsquare_damp)
+            outputs.append(output)
+            ax.text(0.8, 0.78, output, horizontalalignment='center',verticalalignment='center', transform=ax.transAxes, fontsize=12)
             rmses.append(rmse)
             rsquares.append(rsquare)
             rsquare_damps.append(rsquare_damp)
@@ -73,8 +80,9 @@ def main(argv):
             exp = file.split('/')[-1][:-4]+"_"+str(i)
             exps.append(exp)
             periods.append(params[4])
-            fig.savefig("res_"+exp, dpi=600)
+            fig.savefig(exp, dpi=600)
             plt.close(fig)
+
 
             # plt.show()
 
@@ -83,8 +91,15 @@ def main(argv):
     fp.write('exp, period, rmse, rsquare, rsqare_damp, peakDiffSquare\n')
     for i in range(results.shape[0]):
         fp.write(str(exps[i])+','+str(periods[i])+','+str(results[i,0])+','+str(results[i,1])+','+str(results[i,2])+','+str(results[i,3])+'\n')
-
     fp.close()
+
+    fp = open('results_good.csv', 'w')
+    fp.write('exp, baseline, amplitude, damp, phase, period, trend\n')
+    for i in range(results.shape[0]):
+        if outputs[i] is True:
+            fp.write(str(exps[i])+','+str(params_full[i][0])+','+str(params_full[i][1])+','+str(params_full[i][2])+','+str(params_full[i][3])+','+str(params_full[i][4])+','+str(params_full[i][5])+'\n')
+    fp.close()
+
 
 
 
