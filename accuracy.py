@@ -25,7 +25,7 @@ def rsquare(obs, exp):
 
 # rsquare
 def rsquare_damp(obs, exp, x, l):
-    l = min(l, 0.03)
+    l = min(l, 0.04)
     damp = np.exp(l*x)
     residual = exp-obs
     sse = np.sum(np.square(np.multiply(residual, damp)))
@@ -96,10 +96,10 @@ def findObsPeaksIdx(x, obs, exp_peaks_idx, window):
 
 # criteria using period, rsqaure, rsquare_damp
 def criteria(period, rsquare, rsquare_damp):
-    if period<15 or period>30:
+    if period<16 or period>32:
         return False
     if rsquare<0.9:
         return False
-    if rsquare_damp<0.925:
+    if rsquare_damp<0.9:
         return False
     return True

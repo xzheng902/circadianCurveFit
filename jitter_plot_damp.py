@@ -107,36 +107,36 @@ class Experiment:
         if self.reporter == 'Bmal1' and self.treatment == 'Indirubin':
             ax.set_xticks(range(len(self.legend1.keys())+1)[1:])
             ax.set_xticklabels(self.legend1.keys())
-            ax.set_title(self.treatment+" "+self.reporter+" period")
-            ax.set_ylim(16,32)
+            ax.set_title(self.treatment+" "+self.reporter+" damping")
+            ax.set_ylim(0,0.1)
         elif self.reporter == 'Per2' and self.treatment == 'Indirubin':
             ax.set_xticks(range(len(self.legend2.keys())+1)[1:])
             ax.set_xticklabels(self.legend2.keys())
-            ax.set_title(self.treatment+" "+self.reporter+" period")
-            ax.set_ylim(16,32)
+            ax.set_title(self.treatment+" "+self.reporter+" damping")
+            ax.set_ylim(0,0.1)
         elif self.reporter == 'Bmal1' and self.treatment == 'Indirubin-IODO':
             ax.set_xticks(range(len(self.legend3.keys())+1)[1:])
             ax.set_xticklabels(self.legend3.keys())
-            ax.set_title(self.treatment+" "+self.reporter+" period")
-            ax.set_ylim(16,32)
+            ax.set_title(self.treatment+" "+self.reporter+" damping")
+            ax.set_ylim(0,0.1)
         elif self.reporter == 'Per2' and self.treatment == 'Indirubin-IODO':
             ax.set_xticks(range(len(self.legend4.keys())+1)[1:])
             ax.set_xticklabels(self.legend4.keys())
-            ax.set_title(self.treatment+" "+self.reporter+" period")
-            ax.set_ylim(16,32)
+            ax.set_title(self.treatment+" "+self.reporter+" damping")
+            ax.set_ylim(0,0.1)
         elif self.reporter == 'Bmal1' and self.treatment == 'Indirubin-SA':
             ax.set_xticks(range(len(self.legend5.keys())+1)[1:])
             ax.set_xticklabels(self.legend5.keys())
-            ax.set_title(self.treatment+" "+self.reporter+" period")
-            ax.set_ylim(16,32)
+            ax.set_title(self.treatment+" "+self.reporter+" damping")
+            ax.set_ylim(0,0.1)
         elif self.reporter == 'Per2' and self.treatment == 'Indirubin-SA':
             ax.set_xticks(range(len(self.legend6.keys())+1)[1:])
             ax.set_xticklabels(self.legend6.keys())
-            ax.set_title(self.treatment+" "+self.reporter+" period")
-            ax.set_ylim(16,32)
+            ax.set_title(self.treatment+" "+self.reporter+" damping")
+            ax.set_ylim(0,0.1)
 
         # plt.show()
-        fig.savefig(self.treatment+" "+self.reporter+" period", dpi=600)
+        fig.savefig(self.treatment+" "+self.reporter+" damping", dpi=600)
         plt.close(fig)
 
 
@@ -157,7 +157,7 @@ def main(argv):
         expinfo = words[0].split('-')
         # check if in exp list
         exist = False
-        period = float(words[6])
+        period = float(words[4])
         treatment = "-".join(expinfo[3:]).split('_')[0]
         reporter = expinfo[1]
         date = words[1]

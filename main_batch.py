@@ -31,6 +31,7 @@ def main(argv):
     rsquare_damps = []
     peakDiffSquares = []
     outputs = []
+    dates = []
 
     params_full = []
 
@@ -52,8 +53,10 @@ def main(argv):
                 peakDiffSquares.append(-1)
                 exp = file.split('/')[-1][:-4]+"_"+str(i)
                 exps.append(exp)
+                dates.append(expList[i].date)
                 periods.append(-1)
                 outputs.append(False)
+                fig.savefig(exp, dpi=600)
                 continue
             y_exp = analysis.obj_func_Hirota(x, params[0], params[1], params[2], params[3], params[4], params[5])
             ax.plot(x, y_exp, 'r-')
@@ -79,6 +82,7 @@ def main(argv):
             peakDiffSquares.append(peakDiffSquare)
             exp = file.split('/')[-1][:-4]+"_"+str(i)
             exps.append(exp)
+            dates.append(expList[i].date)
             periods.append(params[4])
             fig.savefig(exp, dpi=600)
             plt.close(fig)
@@ -94,10 +98,10 @@ def main(argv):
     fp.close()
 
     fp = open('results_good.csv', 'w')
-    fp.write('exp, baseline, amplitude, damp, phase, period, trend\n')
+    fp.write('exp, date, baseline, amplitude, damp, phase, period, trend\n')
     for i in range(results.shape[0]):
         if outputs[i] is True:
-            fp.write(str(exps[i])+','+str(params_full[i][0])+','+str(params_full[i][1])+','+str(params_full[i][2])+','+str(params_full[i][3])+','+str(params_full[i][4])+','+str(params_full[i][5])+'\n')
+            fp.write(str(exps[i])+','+str(dates[i])+','+str(params_full[i][0])+','+str(params_full[i][1])+','+str(params_full[i][2])+','+str(params_full[i][3])+','+str(params_full[i][4])+','+str(params_full[i][5])+'\n')
     fp.close()
 
 
