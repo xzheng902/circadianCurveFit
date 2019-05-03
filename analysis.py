@@ -55,6 +55,40 @@ def least_squares_Hirota(full_data):
     return popt
 
 
+# fit hirota
+def fit_hirota(x, y):
+    # print(x.shape)
+    # print(y.shape)
+    midIdx = int(x.shape[0]/2)
+    est_period = 24.0
+    est_damp = 0.005
+    # estimate trend (slope of the medians of the first half and that of the second half)
+    first_half_medians_y = np.median(y[:midIdx,:])
+    second_half_medians_x = np.median(x[midIdx:,:])
+    second_half_medians_y = np.median(y[midIdx:,:])
+    first_half_medians_x = np.median(x[:midIdx,:])
+    # print(first_half_medians_x, first_half_medians_y, second_half_medians_x, second_half_medians_y)
+    est_trend = (second_half_medians_y-first_half_medians_y)/(second_half_medians_x-first_half_medians_x)
+    # print(est_trend)
+    # estimate baseline
+    est_baseline = np.median(y)
+    # print(est_baseline)
+    # # estimate phase
+    # # FIX this
+    est_phase = x[np.argmax(y)][0]
+    # print(est_phase)
+    # estimate amplitude
+    est_amp = (np.max(y)-np.min(y))/2
+    # print(est_amp)
+
+    # curve fit
+    try:
+        popt, pcov = scipy.optimize.curve_fit(obj_func_Hirota, x.flatten(), y.flatten(), p0=[est_baseline, est_amp, est_damp, est_phase, est_period, est_trend])
+    except:
+        return None
+
+    return popt
+
 
 # analysis code 5 methods
 

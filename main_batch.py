@@ -43,7 +43,7 @@ def main(argv):
             fig = plt.figure()
             ax = fig.add_subplot(111)
             ax.plot(x, y_data, 'b-')
-            params = analysis.least_squares_Hirota(expList[i])
+            params = analysis.fit_hirota(x, y_data)
             params_full.append(params)
             if params is None:
                 print("Curve_fit failed for experiemnt "+str(i))

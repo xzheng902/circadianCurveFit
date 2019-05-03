@@ -36,6 +36,13 @@ def main(argv):
         ax = fig.add_subplot(111)
         # blue raw data
         ax.plot(x, y_data, label="data")
+        params_fit_hirota = analysis.fit_hirota(x, y_data)
+        if params_fit_hirota is None:
+            print("fit hirota failed for experiemnt "+str(idx))
+        else:
+            y_exp = analysis.obj_func_Hirota(x, params_fit_hirota[0], params_fit_hirota[1], params_fit_hirota[2], params_fit_hirota[3], params_fit_hirota[4], params_fit_hirota[5])
+            ax.plot(x, y_exp, label="fit hirota")
+
         # params = analysis.least_squares_Hirota(expList[idx])
         params_fit0 = analysis.fit0(x, y_data)
         # params_fit0 = analysis.fit0(np.array(expList[idx].windowBaselinedData()[:,0]), np.array(expList[idx].windowBaselinedData()[:,1]))
@@ -92,7 +99,7 @@ def main(argv):
         for i in range(len(expList)):
             x = np.array(expList[i].processData()[:,0])
             y_data = np.array(expList[i].processData()[:,1])
-            params = analysis.least_squares_Hirota(expList[i])
+            params = analysis.fit_hirota(x, y_data)
             ax = fig.add_subplot(numRows, 4, i+1)
             # blue raw data
             ax.plot(x, y_data, 'b-')
