@@ -245,8 +245,7 @@ def fit2(x, y):
 
     p0=np.array([est_baseline, est_amp, est_damp, est_phase, est_period, est_trend], dtype=float)
 
-    fit = scipy.optimize.least_squares(obj_func_fit2, p0, args=(x,y))
-    # print(fit)
+    fit = scipy.optimize.least_squares(obj_func_fit2, p0, args=(x,y),bounds=([-np.inf, -np.inf, 0, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, 0.05, np.inf, np.inf, np.inf]))
 
     return fit.x
 
@@ -297,7 +296,7 @@ def fit4(x, y):
 
     p0=np.array([est_baseline, est_amp, est_damp, est_phase, est_period, est_trend], dtype=float)
 
-    fit = scipy.optimize.least_squares(obj_func_fit4, p0, args=(x,y))
+    fit = scipy.optimize.least_squares(obj_func_fit4, p0, args=(x,y),bounds=([-np.inf, -np.inf, 0, -np.inf, -np.inf, -np.inf], [np.inf, np.inf, 0.05, np.inf, np.inf, np.inf]))
     # print(fit)
 
     return fit.x

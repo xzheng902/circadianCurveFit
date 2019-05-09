@@ -42,35 +42,38 @@ def main(argv):
         else:
             y_exp = analysis.obj_func_Hirota(x, params_fit_hirota[0], params_fit_hirota[1], params_fit_hirota[2], params_fit_hirota[3], params_fit_hirota[4], params_fit_hirota[5])
             ax.plot(x, y_exp, label="fit hirota")
-
-        # params = analysis.least_squares_Hirota(expList[idx])
-        params_fit0 = analysis.fit0(x, y_data)
-        # params_fit0 = analysis.fit0(np.array(expList[idx].windowBaselinedData()[:,0]), np.array(expList[idx].windowBaselinedData()[:,1]))
-        # print("old hirota params: ",params)
-        # print("fit0 params: ", params_fit0)
-        if params_fit0 is None:
-            print("fit0 failed for experiemnt "+str(idx))
-        else:
-            y_exp = analysis.obj_func_Hirota(x, params_fit0[0], params_fit0[1], params_fit0[2], params_fit0[3], params_fit0[4], params_fit0[5])
-            # red fit
-            ax.plot(x, y_exp, label="fit0")
-        params_fit1 = analysis.fit1(x, y_data)
-        if params_fit1 is None:
-            print("fit1 failed for experiemnt "+str(idx))
-        else:
-            y_exp = analysis.obj_func_Hirota(x, params_fit1[0], params_fit1[1], params_fit1[2], params_fit1[3], params_fit1[4], params_fit1[5])
-            ax.plot(x, y_exp, label="fit1")
+        #
+        # # params = analysis.least_squares_Hirota(expList[idx])
+        # params_fit0 = analysis.fit0(x, y_data)
+        # # params_fit0 = analysis.fit0(np.array(expList[idx].windowBaselinedData()[:,0]), np.array(expList[idx].windowBaselinedData()[:,1]))
+        # # print("old hirota params: ",params)
+        # # print("fit0 params: ", params_fit0)
+        # if params_fit0 is None:
+        #     print("fit0 failed for experiemnt "+str(idx))
+        # else:
+        #     y_exp = analysis.obj_func_Hirota(x, params_fit0[0], params_fit0[1], params_fit0[2], params_fit0[3], params_fit0[4], params_fit0[5])
+        #     # red fit
+        #     ax.plot(x, y_exp, label="fit0")
+        # params_fit1 = analysis.fit1(x, y_data)
+        # if params_fit1 is None:
+        #     print("fit1 failed for experiemnt "+str(idx))
+        # else:
+        #     y_exp = analysis.obj_func_Hirota(x, params_fit1[0], params_fit1[1], params_fit1[2], params_fit1[3], params_fit1[4], params_fit1[5])
+        #     ax.plot(x, y_exp, label="fit1")
         # params_fit2 = analysis.fit2(x, y_data)
         # if params_fit2 is None:
         #     print("fit2 failed for experiemnt "+str(idx))
         # else:
         #     y_exp = analysis.obj_func_Hirota(x, params_fit2[0], params_fit2[1], params_fit2[2], params_fit2[3], params_fit2[4], params_fit2[5])
         #     ax.plot(x, y_exp, label="fit2")
+            # print(params_fit2)
+            # ax.plot(x, analysis.obj_func_fit2(params_fit2,x,y_data))
         # params_fit4 = analysis.fit4(x, y_data)
         # if params_fit4 is None:
         #     print("fit4 failed for experiemnt "+str(idx))
         # else:
         #     y_exp = analysis.obj_func_Hirota(x, params_fit4[0], params_fit4[1], params_fit4[2], params_fit4[3], params_fit4[4], params_fit4[5])
+        #     print(params_fit4)
         #     ax.plot(x, y_exp, label="fit4")
         plt.legend()
             # green residual
